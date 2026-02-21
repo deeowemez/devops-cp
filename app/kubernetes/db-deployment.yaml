@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pg
+  name: db
   labels:
-    app: pg
+    app: db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pg
+      app: db
   template:
     metadata:
       labels:
-        app: pg
+        app: db
     spec:
       containers:
         - name: postgres
@@ -21,14 +21,6 @@ spec:
           ports:
             - containerPort: 5432
           env:
-            - name: NODE_ENV
-              value: "development"
-            - name: PORT
-              value: "3000"
-            - name: POSTGRES_HOST
-              value: "postgres"
-            - name: POSTGRES_PORT
-              value: "5432"
             - name: POSTGRES_DB
               value: "taskdb"
             - name: POSTGRES_USER
