@@ -20,6 +20,9 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
+          volumeMounts:
+            - name: db-init
+              mountPath: /docker-entrypoint-initdb.d
           env:
             - name: POSTGRES_DB
               value: "taskdb"
@@ -27,4 +30,7 @@ spec:
               value: "postgres"
             - name: POSTGRES_PASSWORD
               value: "postgres"
-
+      volumes:
+        - name: db-init
+          configMap:
+            name: db-init
