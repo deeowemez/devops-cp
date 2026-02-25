@@ -20,5 +20,9 @@ spec:
         image: app-frontend:latest
         imagePullPolicy: Never
         ports: 
-        - containerPort: 8080
+        - containerPort: 80
           name: frontend
+        env:
+        - name: REACT_APP_API_URL
+          value: "/api"
+

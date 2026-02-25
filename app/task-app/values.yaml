@@ -1,0 +1,37 @@
+# Global settings
+global:
+  environment: development
+
+# Frontend configuration
+frontend:
+  name: frontend
+  replicas: 1
+  apiUrl: "/api"
+  image:
+    repository: app-frontend
+    tag: latest
+  service:
+    type: ClusterIP
+    port: 8080
+
+# Backend configuration
+backend:
+  name: backend
+  replicas: 1
+  image:
+    repository: app-backend
+    tag: latest
+  service:
+    type: ClusterIP
+    port: 3000
+
+# Database configuration
+db:
+  name: db
+  replicas: 1
+  db: taskdb
+  username: postgres
+  password: postgres
+  image:
+    repository: postgres
+    tag: "15-alpine"
