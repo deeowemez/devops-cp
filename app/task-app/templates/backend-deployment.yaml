@@ -20,3 +20,16 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: "development"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+        - name: POSTGRES_DB
+          value: "taskdb"
+        - name: POSTGRES_HOST
+          value: "db"
+        - name: POSTGRES_PORT
+          value: "5432"
