@@ -1,23 +1,41 @@
-build-job:
+stages:
+  - build
+
+variables:
+  # Required for Docker-in-Docker to work properly
+  DOCKER_TLS_CERTDIR: ""
+
+  FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
+  BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
+
+.default-docker:
+  image: docker:24
+  services:
+    - docker:24-dind
+  before_script:
+    # Login to GitLab Container Registry
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+# -------------------------
+# BUILD FRONTEND
+# -------------------------
+build-frontend:
   stage: build
+  extends: .default-docker
   script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
+    - docker build -t $FRONTEND_IMAGE ./app/frontend
+    - docker push $FRONTEND_IMAGE
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
-test-job1:
-  stage: test
+# -------------------------
+# BUILD BACKEND
+# -------------------------
+build-backend:
+  stage: build
+  extends: .default-docker
   script:
-    - echo "This job tests something"
-
-test-job2:
-  stage: test
-  script:
-    - echo "This job tests something, but takes more time than test-job1."
-    - echo "After the echo commands complete, it runs the sleep command for 20 seconds"
-    - echo "which simulates a test that runs 20 seconds longer than test-job1"
-    - sleep 20
-
-deploy-prod:
-  stage: deploy
-  script:
-    - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
-  environment: production
+    - docker build -t $BACKEND_IMAGE ./app/backend
+    - docker push $BACKEND_IMAGE
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
