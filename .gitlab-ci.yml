@@ -27,6 +27,9 @@ build-frontend:
     - docker push $FRONTEND_IMAGE
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - app/frontend/**/*
+
 
 # -------------------------
 # BUILD BACKEND
@@ -39,3 +42,5 @@ build-backend:
     - docker push $BACKEND_IMAGE
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - app/backend/**/*
