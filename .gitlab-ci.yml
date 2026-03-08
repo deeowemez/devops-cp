@@ -54,7 +54,7 @@ update-frontend-helm:
     - git config --global user.name "GitLab CI"
 
     # Update frontend image tag in Helm values
-    - "sed -i 's|tag:.*backend|tag: $CI_COMMIT_SHORT_SHA|g' app/helm/values.yaml"
+    - "sed -i 's|tag:.*frontend|tag: $CI_COMMIT_SHORT_SHA|g' app/helm/values.yaml"
 
     - git add app/helm/values.yaml
     - git commit -m "Update frontend image $CI_COMMIT_SHORT_SHA [CI SKIP]" || echo "No changes"
