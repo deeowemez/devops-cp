@@ -8,7 +8,7 @@ frontend:
   replicas: 1
   apiUrl: "/api"
   image:
-    repository: app-frontend
+    repository: registry.gitlab.com/deeowemez/task-app/frontend
     tag: latest
   service:
     type: ClusterIP
@@ -19,7 +19,7 @@ backend:
   name: backend
   replicas: 1
   image:
-    repository: app-backend
+    repository: registry.gitlab.com/deeowemez/task-app/backend
     tag: latest
   service:
     type: ClusterIP
