@@ -1,5 +1,6 @@
 stages:
   - build
+  - update-helm
 
 variables:
   # Required for Docker-in-Docker to work properly
@@ -40,6 +41,42 @@ build-backend:
   script:
     - docker build -t $BACKEND_IMAGE ./app/backend
     - docker push $BACKEND_IMAGE
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - app/backend/**/*
+
+update-frontend-helm:
+  stage: update-helm
+  image: alpine/git
+  script:
+    - git config --global user.email "ci@gitlab"
+    - git config --global user.name "GitLab CI"
+
+    # Update frontend image tag in Helm values
+    - "sed -i 's|tag:.*backend|tag: $CI_COMMIT_SHORT_SHA|g' app/helm/values.yaml"
+
+    - git add app/helm/values.yaml
+    - git commit -m "Update frontend image $CI_COMMIT_SHORT_SHA [CI SKIP]" || echo "No changes"
+    - git push origin main
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - app/frontend/**/*
+
+update-backend-helm:
+  stage: update-helm
+  image: alpine/git
+  script:
+    - git config --global user.email "ci@gitlab"
+    - git config --global user.name "GitLab CI"
+
+    # Update backend image tag
+    - "sed -i 's|tag:.*backend|tag: $CI_COMMIT_SHORT_SHA|g' app/helm/values.yaml"
+
+    - git add app/helm/values.yaml
+    - git commit -m "Update backend image $CI_COMMIT_SHORT_SHA [CI SKIP]" || echo "No changes"
+    - git push origin main
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
