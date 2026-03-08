@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: task-app
+  namespace: argocd
+spec:
+  project: default
+
+  # Git source
+  source:
+    repoURL: git@gitlab.com:deeowemez/task-app.git
+    targetRevision: HEAD
+    path: app/helm
+    helm:
+      valueFiles:
+        - values.yaml
+
+  # Destination Kubernetes cluster and namespace
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: task-app
+
+  # Auto-sync policy
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+  # Optional: Add image updater annotation for later automation
+  # These will allow ArgoCD Image Updater to watch and update images
+  metadata:
+    annotations:
+      argocd-image-updater.argoproj.io/image-list: |
+        registry.gitlab.com/deeowemez/task-app/frontend
+        registry.gitlab.com/deeowemez/task-app/backend
