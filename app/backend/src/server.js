@@ -44,8 +44,8 @@ app.get('/api/tasks', async (req, res) => {
     );
 
     console.log(`[TASKS][GET] Returned ${result.rows.length} tasks`);
-
     res.json(result.rows);
+    
   } catch (err) {
     console.error('[TASKS][GET][ERROR] Failed to fetch tasks:', err);
 
