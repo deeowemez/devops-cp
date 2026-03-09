@@ -5,8 +5,8 @@ metadata:
   namespace: argocd
   annotations:
     argocd-image-updater.argoproj.io/image-list: |
-      registry.gitlab.com/deeowemez/task-app/frontend
-      registry.gitlab.com/deeowemez/task-app/backend
+      frontend=registry.gitlab.com/deeowemez/task-app/frontend
+      backend=registry.gitlab.com/deeowemez/task-app/backend
 
     # Update strategy for each image (latest short SHA)
     argocd-image-updater.argoproj.io/frontend.update-strategy: newest-build
