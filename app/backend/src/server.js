@@ -61,7 +61,6 @@ app.post('/api/tasks', async (req, res) => {
 
   if (!title) {
     console.warn('[TASKS][POST] Task creation failed: Title missing');
-
     return res.status(400).json({ error: 'Title is required' });
   }
 

@@ -18,7 +18,7 @@ spec:
       - name: gitlab-registry-secret
       containers:
       - name: {{ .Values.backend.name }}
-        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.be-tag }}"
+        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.be_tag }}"
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
