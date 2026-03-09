@@ -19,7 +19,7 @@ backend:
   name: backend
   replicas: 1
   image:
-    repository: $BACKEND_IMAGE
+    repository: registry.gitlab.com/deeowemez/task-app/backend
     be-tag: 7e7710c6
   service:
     type: ClusterIP
