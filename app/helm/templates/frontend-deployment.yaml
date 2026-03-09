@@ -22,3 +22,5 @@ spec:
         env:
         - name: REACT_APP_API_URL
           value: "/api"
+        imagePullSecrets:
+        - name: gitlab-registry-secret

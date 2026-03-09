@@ -66,3 +66,5 @@ coverage/
 # Keep these files
 !.env.example
 !docker compose.yml
+
+dockerconfig.json

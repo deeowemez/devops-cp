@@ -35,3 +35,6 @@ db:
   image:
     repository: postgres
     tag: "15-alpine"
+
+registrySecret:
+  ewogICJhdXRocyI6IHsKICAgICJyZWdpc3RyeS5naXRsYWIuY29tIjogewogICAgICAidXNlcm5hbWUiOiAiZGVlb3dlbWV6IiwKICAgICAgInBhc3N3b3JkIjogImdscGF0LWw5NkVQM0RYNW10UmFMQlpMY1JIVW04Nk1RcDFPbXR5ZDNrd0N3LjAxLjEyMWtyenRsaiIsCiAgICAgICJhdXRoIjogIkJBU0U2NCh1c2VybmFtZTp0b2tlbikiCiAgICB9CiAgfQp9Cg==
