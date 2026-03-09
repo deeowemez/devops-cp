@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: task-app
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: |
+      registry.gitlab.com/deeowemez/task-app/frontend
+      registry.gitlab.com/deeowemez/task-app/backend
 spec:
   project: default
 
@@ -25,11 +29,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-
-  # Optional: Add image updater annotation for later automation
-  # These will allow ArgoCD Image Updater to watch and update images
-  metadata:
-    annotations:
-      argocd-image-updater.argoproj.io/image-list: |
-        registry.gitlab.com/deeowemez/task-app/frontend
-        registry.gitlab.com/deeowemez/task-app/backend
