@@ -52,6 +52,7 @@ update-helm-frontend:
   script:
     - git config --global user.email "ci-bot@example.com"
     - git config --global user.name "CI Bot"
+    - git remote set-url origin https://$CI_USERNAME:$CI_PASSWORD@gitlab.com/deeowemez/task-app.git
     - git checkout main
     - echo "Updating frontend image in Helm values.yaml"
     - "sed -i 's|repository:.*frontend.*|repository: $FRONTEND_IMAGE|' app/helm/values.yaml"
@@ -72,6 +73,7 @@ update-helm-backend:
   script:
     - git config --global user.email "ci-bot@example.com"
     - git config --global user.name "CI Bot"
+    - git remote set-url origin https://$CI_USERNAME:$CI_PASSWORD@gitlab.com/deeowemez/task-app.git
     - git checkout main
     - echo "Updating backend image in Helm values.yaml"
     - "sed -i 's|repository:.*backend.*|repository: $BACKEND_IMAGE|' app/helm/values.yaml"
