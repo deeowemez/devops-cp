@@ -69,4 +69,5 @@ coverage/
 
 dockerconfig.json
 **/*secret.yaml
+**/*secrets.yaml
 
