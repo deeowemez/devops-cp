@@ -18,10 +18,7 @@ spec:
       - name: gitlab-registry-secret
       containers:
       - name: {{ .Values.frontend.name }}
-        image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+        image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.fe-tag }}"
         imagePullPolicy: Always
         ports:
         - containerPort: 80
-        env:
-        - name: REACT_APP_API_URL
-          value: "/api"

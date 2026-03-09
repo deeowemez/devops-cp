@@ -55,9 +55,9 @@ update-helm-frontend:
     - git remote set-url origin https://$CI_USERNAME:$CI_PASSWORD@gitlab.com/deeowemez/task-app.git
     - git checkout main
     - echo "Updating frontend image in Helm values.yaml"
-    - "sed -i 's|repository:.*frontend.*|repository: $FRONTEND_IMAGE|' app/helm/values.yaml"
+    - sed -i "s|^\(\s*fe-tag:\s*\).*|\1$CI_COMMIT_SHORT_SHA|" app/helm/values.yaml
     - git add app/helm/values.yaml
-    - git commit -m "Update frontend image to $FRONTEND_IMAGE [ci skip]" || echo "No changes to commit"
+    - git commit -m "Update frontend image"
     - git push origin main
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
@@ -76,9 +76,9 @@ update-helm-backend:
     - git remote set-url origin https://$CI_USERNAME:$CI_PASSWORD@gitlab.com/deeowemez/task-app.git
     - git checkout main
     - echo "Updating backend image in Helm values.yaml"
-    - "sed -i 's|repository:.*backend.*|repository: $BACKEND_IMAGE|' app/helm/values.yaml"
+    - sed -i "s|^\(\s*be-tag:\s*\).*|\1$CI_COMMIT_SHORT_SHA|" app/helm/values.yaml
     - git add app/helm/values.yaml
-    - git commit -m "Update backend image to $BACKEND_IMAGE [ci skip]" || echo "No changes to commit"
+    - git commit -m "Update backend image"
     - git push origin main
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
