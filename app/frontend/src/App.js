@@ -81,7 +81,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Task Manager</h1>
+      <h1>Task Manager v0.0.1</h1>
 
       <form onSubmit={handleSubmit} className="task-form">
         <input
