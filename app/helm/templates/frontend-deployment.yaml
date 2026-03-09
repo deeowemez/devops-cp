@@ -14,6 +14,8 @@ spec:
       labels:
         app: {{ .Values.frontend.name }}
     spec:
+      imagePullSecrets:
+      - name: gitlab-registry-secret
       containers:
       - name: {{ .Values.frontend.name }}
         image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
@@ -23,5 +25,3 @@ spec:
         env:
         - name: REACT_APP_API_URL
           value: "/api"
-        imagePullSecrets:
-        - name: gitlab-registry-secret
