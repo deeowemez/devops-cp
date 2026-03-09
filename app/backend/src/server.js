@@ -124,7 +124,6 @@ app.delete('/api/tasks/:id', async (req, res) => {
 
     if (result.rows.length === 0) {
       console.warn(`[TASKS][DELETE] Task id=${id} not found`);
-
       return res.status(404).json({ error: 'Task not found' });
     }
 
