@@ -35,5 +35,3 @@ spec:
           value: "db"
         - name: POSTGRES_PORT
           value: "5432"
-        imagePullSecrets:
-        - name: gitlab-registry-secret
