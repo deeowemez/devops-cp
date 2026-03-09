@@ -17,7 +17,6 @@ spec:
       containers:
       - name: {{ .Values.frontend.name }}
         image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
-        imagePullPolicy: Never
         ports:
         - containerPort: 80
         env:
