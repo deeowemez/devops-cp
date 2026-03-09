@@ -3,9 +3,7 @@ stages:
   - update-helm
 
 variables:
-  # Required for Docker-in-Docker to work properly
   DOCKER_TLS_CERTDIR: ""
-
   FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
 
@@ -15,68 +13,31 @@ variables:
     - docker:24-dind
   before_script:
     # Login to GitLab Container Registry
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    # Enable Buildx for cross-platform builds
+    - docker buildx create --use
 
 # -------------------------
-# BUILD FRONTEND
+# BUILD FRONTEND (ARM64)
 # -------------------------
 build-frontend:
   stage: build
   extends: .default-docker
   script:
-    - docker build -t $FRONTEND_IMAGE ./app/frontend
-    - docker push $FRONTEND_IMAGE
+    - docker buildx build --platform linux/arm64 -t $FRONTEND_IMAGE ./app/frontend --push
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
         - app/frontend/**/*
 
-
 # -------------------------
-# BUILD BACKEND
+# BUILD BACKEND (ARM64)
 # -------------------------
 build-backend:
   stage: build
   extends: .default-docker
   script:
-    - docker build -t $BACKEND_IMAGE ./app/backend
-    - docker push $BACKEND_IMAGE
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      changes:
-        - app/backend/**/*
-
-update-frontend-helm:
-  stage: update-helm
-  image: alpine/git
-  script:
-    - git config --global user.email "ci@gitlab"
-    - git config --global user.name "GitLab CI"
-
-    # Update frontend image tag in Helm values
-    - "sed -i 's|tag:.*frontend|tag: $CI_COMMIT_SHORT_SHA|g' app/helm/values.yaml"
-
-    - git add app/helm/values.yaml
-    - git commit -m "Update frontend image $CI_COMMIT_SHORT_SHA [CI SKIP]" || echo "No changes"
-    - git push origin main
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      changes:
-        - app/frontend/**/*
-
-update-backend-helm:
-  stage: update-helm
-  image: alpine/git
-  script:
-    - git config --global user.email "ci@gitlab"
-    - git config --global user.name "GitLab CI"
-
-    # Update backend image tag
-    - "sed -i 's|tag:.*backend|tag: $CI_COMMIT_SHORT_SHA|g' app/helm/values.yaml"
-
-    - git add app/helm/values.yaml
-    - git commit -m "Update backend image $CI_COMMIT_SHORT_SHA [CI SKIP]" || echo "No changes"
-    - git push origin main
+    - docker buildx build --platform linux/arm64 -t $BACKEND_IMAGE ./app/backend --push
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
