@@ -68,3 +68,5 @@ coverage/
 !docker compose.yml
 
 dockerconfig.json
+**/*secret.yaml
+
