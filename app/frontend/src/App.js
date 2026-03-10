@@ -11,7 +11,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = process.env.REACT_APP_API_URL || "/api";
+  const API_URL = "/api";
 
   useEffect(() => {
     fetchTasks();

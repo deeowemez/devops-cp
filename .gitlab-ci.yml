@@ -24,7 +24,7 @@ build-frontend:
   stage: build
   extends: .default-docker
   script:
-    - docker buildx build --build-arg REACT_APP_API_URL=/api --platform linux/arm64 -t $FRONTEND_IMAGE ./app/frontend --push
+    - docker buildx build --no-cache --platform linux/arm64 -t $FRONTEND_IMAGE ./app/frontend --push
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
