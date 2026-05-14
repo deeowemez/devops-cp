@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Setting Up GitLab CI/CD
 
 This guide will help you create an automated pipeline that builds and deploys your application. Don't worry if you're new to CI/CD - we'll explain everything!

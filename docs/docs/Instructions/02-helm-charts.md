@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Creating Your First Helm Chart
 
 This guide will help you create a Helm chart for the task management application. We'll break it down into simple steps.

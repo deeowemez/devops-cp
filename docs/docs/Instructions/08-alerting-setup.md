@@ -1,3 +1,7 @@
+---
+sidebar_position: 9
+---
+
 # Setting Up Alerting
 
 This guide will help you set up intelligent alerting for your task management application so you know when something goes wrong before your users do!

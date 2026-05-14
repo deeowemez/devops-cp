@@ -1,3 +1,7 @@
+---
+sidebar_position: 8
+---
+
 # Creating Grafana Dashboards
 
 This guide will help you create beautiful and useful dashboards for monitoring your task management application.

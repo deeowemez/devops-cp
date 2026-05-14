@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Local Kubernetes Setup
 
 This guide will help you set up a local Kubernetes cluster for development. We'll start small and build up step by step.

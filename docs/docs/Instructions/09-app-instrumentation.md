@@ -1,3 +1,7 @@
+---
+sidebar_position: 10
+---
+
 # Application Instrumentation
 
 This guide will help you add comprehensive monitoring to your task management application by instrumenting your code with metrics, logs, and traces.

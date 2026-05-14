@@ -1,3 +1,7 @@
+---
+sidebar_position: 11
+---
+
 # 3-Tier Application Deployment Capstone Project
 
 ## Project Overview

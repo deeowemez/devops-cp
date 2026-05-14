@@ -1,3 +1,7 @@
+---
+sidebar_position: 6
+---
+
 # Putting It All Together
 
 This guide will help you deploy the complete task management application. We'll combine everything we've learned into a working system!

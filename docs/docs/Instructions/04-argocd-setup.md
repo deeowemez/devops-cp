@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Setting Up ArgoCD
 
 This guide will help you implement GitOps using ArgoCD. We'll explain what GitOps is and why it's useful!

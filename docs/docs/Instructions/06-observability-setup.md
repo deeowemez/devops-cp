@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # Observability Stack Setup
 
 This guide will help you implement comprehensive monitoring, logging, and tracing for your task management application using the PGLT stack (Prometheus, Grafana, Loki, Tempo).
