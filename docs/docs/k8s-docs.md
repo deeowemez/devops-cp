@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Kubernetes Deployment Documentation
+# Kubernetes Deployment
 
 **Environment:** Raspberry Pi (local) · **Cluster:** Kind · **Package Manager:** Helm
 

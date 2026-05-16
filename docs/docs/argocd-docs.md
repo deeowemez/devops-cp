@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# ArgoCD — GitOps Deployment Documentation
+# ArgoCD Deployment
 
 **Reference:** [ArgoCD Getting Started](https://argo-cd.readthedocs.io/en/stable/getting_started/) · [ArgoCD CLI Installation](https://argo-cd.readthedocs.io/en/stable/cli_installation/) · [Image Updater](https://argocd-image-updater.readthedocs.io/en/stable/install/installation/)
 
