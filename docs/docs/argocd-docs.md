@@ -98,28 +98,19 @@ argocd version
 
 ---
 
-## 4. Accessing the Dashboard
+## 4 Applying ArgoCD Configuration Files
 
-ArgoCD's web UI runs inside the cluster. There are two ways to access it from the desktop.
-
-### Option A — kubectl port-forward (quick, no ingress needed)
+ArgoCD's own setup — the ingress and the Application object — are applied as plain manifests once, right after installation.
 
 ```bash
-kubectl port-forward svc/argocd-server -n argocd 8090:443
+# Ingress first so the dashboard is reachable
+kubectl apply -f app/argocd/ingress.yaml
+
+# Then the Application — this is what hands control over to ArgoCD
+kubectl apply -f app/argocd/application.yaml
 ```
 
-Then open `https://localhost:8090` in the browser. You will get a TLS warning because ArgoCD uses a self-signed certificate by default — this is safe to bypass for local use.
-
-### Option B — SSH tunnel via ingress (persistent, recommended)
-
-Once ingress is configured (see Section 9), the tunnel defined in `~/.ssh/config` handles access:
-
-```powershell
-# Windows — background tunnel
-Start-Process ssh -ArgumentList "-N argo.pi" -WindowStyle Hidden
-```
-
-Then open `http://argocd.task.local:8090` in the browser.
+From this point ArgoCD watches the repo and manages everything under `app/helm/` automatically. You should not need to run `helm upgrade` or `kubectl apply` for the app again.
 
 ---
 
