@@ -11,3 +11,10 @@ metadata:
   name: argocd
   labels:
     environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+  labels:
+    environment: dev
