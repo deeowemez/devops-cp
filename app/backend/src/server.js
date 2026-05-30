@@ -5,6 +5,7 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const client = require('prom-client');
 require('dotenv').config();
 
 const app = express();
@@ -148,6 +149,19 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`[SERVER] Task API running on port ${PORT}`);
+});
+
+// Create metrics
+const httpRequestDuration = new client.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status']
+});
+
+// Expose metrics endpoint
+app.get('/api/metrics', async (req, res) => {
+  res.set('Content-Type', client.register.contentType);
+  res.end(await client.register.metrics());
 });
 
 module.exports = app;
