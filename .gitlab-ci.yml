@@ -84,3 +84,6 @@ update-helm-backend:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
         - app/backend/**/*
+  needs:
+  - job: update-helm-frontend
+    optional: true              # if this was skipped → update-helm-backend still runs
