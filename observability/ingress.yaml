@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: obs-server
+  name: grafana-ingress
   namespace: observability
 spec:
   ingressClassName: nginx
@@ -13,6 +13,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: obs-server
+                name: prometheus-grafana
                 port:
                   number: 80
