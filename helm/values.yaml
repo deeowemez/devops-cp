@@ -9,7 +9,7 @@ frontend:
   apiUrl: "/api"
   image:
     repository: registry.gitlab.com/deeowemez/task-app/frontend
-    fe_tag: 829533cc
+    fe_tag: 7e42b50f
   service:
     type: ClusterIP
     port: 8080
@@ -20,7 +20,7 @@ backend:
   replicas: 1
   image:
     repository: registry.gitlab.com/deeowemez/task-app/backend
-    be_tag: b4bc1704
+    be_tag: 7e42b50f
   service:
     type: ClusterIP
     port: 3000
