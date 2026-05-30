@@ -20,7 +20,7 @@ backend:
   replicas: 1
   image:
     repository: registry.gitlab.com/deeowemez/task-app/backend
-    be_tag: 7e42b50f
+    be_tag: eb521db4
   service:
     type: ClusterIP
     port: 3000
