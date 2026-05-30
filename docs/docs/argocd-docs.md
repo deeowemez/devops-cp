@@ -104,13 +104,13 @@ ArgoCD's own setup — the ingress and the Application object — are applied as
 
 ```bash
 # Ingress first so the dashboard is reachable
-kubectl apply -f app/argocd/ingress.yaml
+kubectl apply -f argocd/ingress.yaml
 
 # Then the Application — this is what hands control over to ArgoCD
-kubectl apply -f app/argocd/application.yaml
+kubectl apply -f argocd/application.yaml
 ```
 
-From this point ArgoCD watches the repo and manages everything under `app/helm/` automatically. You should not need to run `helm upgrade` or `kubectl apply` for the app again.
+From this point ArgoCD watches the repo and manages everything under `helm/` automatically. You should not need to run `helm upgrade` or `kubectl apply` for the app again.
 
 ---
 

@@ -39,6 +39,7 @@ There are two tunnels configured for this project:
 |---------------|---------------------|-------------------|---------|
 | `app.pi` | `8080` | `app.task.local:80` | Task Manager frontend |
 | `argo.pi` | `8090` | `argocd.task.local:80` | ArgoCD dashboard |
+| `obs.pi` | `8080` | `obs.task.local:80` | Grafana dashboard |
 
 ---
 
@@ -66,6 +67,14 @@ Host argo.pi
     User pi
     IdentityFile ~/.ssh/pc.key
     LocalForward 8090 argocd.task.local:80
+    ExitOnForwardFailure yes
+    RequestTTY no
+
+Host obs.pi
+    HostName 100.104.202.56
+    User pi
+    IdentityFile ~/.ssh/pc.key
+    LocalForward 8085 obs.task.local:80
     ExitOnForwardFailure yes
     RequestTTY no
 ```
@@ -101,6 +110,7 @@ Add these lines:
 127.0.0.1 task.local
 127.0.0.1 app.task.local
 127.0.0.1 argocd.task.local
+127.0.0.1 obs.task.local
 ```
 
 After saving, the browser will resolve `app.task.local` to `127.0.0.1` (your own machine), where the SSH tunnel is listening and forwarding traffic to the Pi.
@@ -119,6 +129,9 @@ Start-Process ssh -ArgumentList "-N app.pi" -WindowStyle Hidden
 
 # ArgoCD dashboard
 Start-Process ssh -ArgumentList "-N argo.pi" -WindowStyle Hidden
+
+# Grafana dashboard
+Start-Process ssh -ArgumentList "-N obs.pi" -WindowStyle Hidden
 ```
 
 `-WindowStyle Hidden` keeps the SSH process running silently in the background with no visible terminal window. `-N` tells SSH not to execute any remote command — it only forwards ports.
@@ -131,6 +144,9 @@ ssh -fN app.pi
 
 # ArgoCD dashboard
 ssh -fN argo.pi
+
+# Grafana dashboard
+ssh -fN obs.pi
 ```
 
 `-f` backgrounds the process after authentication. `-N` forwards only, no remote command.
@@ -151,6 +167,7 @@ Once the tunnel is open:
 |-----|---------|
 | `http://app.task.local:8080` | Task Manager frontend |
 | `http://argocd.task.local:8090` | ArgoCD dashboard |
+| `http://obs.task.local:8080` | Grafana dashboard |
 
 ---
 
@@ -164,6 +181,7 @@ Get-Process ssh
 
 # Check if a specific port is in use
 netstat -ano | findstr :8080
+netstat -ano | findstr :8085
 netstat -ano | findstr :8090
 ```
 
@@ -205,6 +223,7 @@ kill $(lsof -ti:8080)
 # Start both tunnels
 Start-Process ssh -ArgumentList "-N app.pi"   -WindowStyle Hidden
 Start-Process ssh -ArgumentList "-N argo.pi"  -WindowStyle Hidden
+Start-Process ssh -ArgumentList "-N obs.pi"  -WindowStyle Hidden
 
 # Check tunnels are alive
 Get-Process ssh
@@ -219,7 +238,7 @@ Get-Process ssh | Stop-Process
 |-------|----------------|-------------------|-------|
 | `app.pi` | `:8080` | `app.task.local:80` | Task Manager |
 | `argo.pi` | `:8090` | `argocd.task.local:80` | ArgoCD |
-
+| `argo.pi` | `:8085` | `obs.task.local:80` | ArgoCD |
 ---
 
 *Task Manager DevOps Documentation · SSH Access Section*
