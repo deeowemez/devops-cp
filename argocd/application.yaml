@@ -31,7 +31,7 @@ spec:
   source:
     repoURL: git@gitlab.com:deeowemez/task-app.git
     targetRevision: HEAD
-    path: app/helm
+    path: helm/
     helm:
       valueFiles:
         - values.yaml
