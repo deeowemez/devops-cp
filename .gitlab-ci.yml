@@ -56,7 +56,7 @@ update-helm-frontend:
     - git checkout main
     - echo "Updating frontend image in Helm values.yaml"
     - sed -i "s|^\(\s*fe_tag:\s*\).*|\1$CI_COMMIT_SHORT_SHA|" app/helm/values.yaml
-    - git add app/helm/values.yaml
+    - git add helm/values.yaml
     - git commit -m "Update frontend image"
     - git push origin main
   rules:
@@ -77,7 +77,7 @@ update-helm-backend:
     - git checkout main
     - echo "Updating backend image in Helm values.yaml"
     - sed -i "s|^\(\s*be_tag:\s*\).*|\1$CI_COMMIT_SHORT_SHA|" app/helm/values.yaml
-    - git add app/helm/values.yaml
+    - git add helm/values.yaml
     - git commit -m "Update backend image"
     - git push origin main
   rules:
