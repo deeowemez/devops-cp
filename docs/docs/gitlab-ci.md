@@ -1,10 +1,9 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # GitLab CI
-
-### Continuous Integration Pipeline
+## Continuous Integration Pipeline
 
 ---
 
@@ -57,12 +56,27 @@ stages:
   - update-helm
 ```
 
-Stages run sequentially. All `build` jobs run first (and can run in parallel with each other), then all `update-helm` jobs run after every build job in the prior stage has succeeded.
+Stages run sequentially. All `build` jobs run first (and can run in parallel with each other), then all `update-helm` jobs run after. However, because each job uses path-based rules, only the jobs relevant to changed files will actually run in a given pipeline.
 
 | Stage | Jobs | Purpose |
 |-------|------|---------|
 | `build` | `build-frontend`, `build-backend` | Build and push ARM64 Docker images |
 | `update-helm` | `update-helm-frontend`, `update-helm-backend` | Update image tags in `values.yaml` and push back to Git |
+
+### Job dependency with `needs` and `optional: true`
+
+Each `update-helm` job declares a dependency on its corresponding build job using `needs`, and marks it `optional: true`:
+
+```yaml
+update-helm-backend:
+  needs:
+    - job: update-helm-frontend
+      optional: true    # if update-helm-frontend was skipped → update-helm-backend still runs
+```
+
+Without `optional: true`, GitLab would block `update-helm-backend` from running if `update-helm-frontend` was skipped (e.g. because no frontend files changed). Setting it to `true` tells GitLab the dependency is advisory — wait for it if it runs, but don't block if it was skipped.
+
+This also provides a soft ordering for the push-back commits: if both jobs run, `update-helm-backend` waits for `update-helm-frontend` to finish first, reducing the chance of a simultaneous `git push` conflict on `values.yaml`.
 
 ---
 
@@ -192,10 +206,13 @@ update-helm-frontend:
     - git config --global user.name "CI Bot"
     - git remote set-url origin https://$CI_USERNAME:$CI_PASSWORD@gitlab.com/deeowemez/task-app.git
     - git checkout main
+    - git pull --rebase origin main
     - sed -i "s|^\(\s*fe_tag:\s*\).*|\1$CI_COMMIT_SHORT_SHA|" app/helm/values.yaml
     - git add app/helm/values.yaml
-    - git commit -m "Update frontend image"
+    - git commit -m "Update frontend image [skip ci]"
     - git push origin main
+  needs:
+    - job: build-frontend
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
@@ -209,8 +226,10 @@ update-helm-frontend:
 | `git config user.email / user.name` | Sets the identity for the commit. GitLab requires a name and email to create a commit |
 | `git remote set-url origin https://...` | Injects `$CI_USERNAME` and `$CI_PASSWORD` into the remote URL so the push is authenticated. These are custom CI variables, not GitLab's built-in ones |
 | `git checkout main` | Ensures the job is on the `main` branch before making changes |
-| `sed -i "s|..."` | Finds the `fe_tag:` line in `values.yaml` and replaces the value with the current commit SHA. See below for a breakdown |
-| `git add / commit / push` | Commits the updated `values.yaml` and pushes back to `main` |
+| `git pull --rebase origin main` | Pulls any commits that landed on `main` since the job started (e.g. the other `update-helm` job pushing first). Rebase replays the local change on top cleanly instead of creating a merge commit |
+| `sed -i "s|..."` | Finds the `fe_tag:` line in `values.yaml` and replaces the value with the current commit SHA |
+| `git commit -m "... [skip ci]"` | Commits the updated `values.yaml`. `[skip ci]` tells GitLab not to trigger a new pipeline for this bot commit |
+| `git push origin main` | Pushes back to `main` — ArgoCD detects this change and syncs the cluster |
 
 ### The `sed` command broken down
 
@@ -259,32 +278,56 @@ GitLab's built-in variables (`CI_REGISTRY_USER`, `CI_REGISTRY_PASSWORD`, `CI_REG
 
 ## 8. Full Pipeline Flow
 
+### Only frontend changed
+
 ```
-git push → main (frontend file changed)
+git push → main (frontend files changed)
   │
   ├── [stage: build]
-  │     └── build-frontend
-  │           ├── docker login to registry.gitlab.com
-  │           ├── docker buildx create --use
-  │           └── docker buildx build --platform linux/arm64 ... --push
-  │                 └── image pushed: registry.gitlab.com/.../frontend:7e7710c
+  │     ├── build-frontend   ← runs (frontend files changed)
+  │     └── build-backend    ← skipped (no backend files changed)
   │
   └── [stage: update-helm]
-        └── update-helm-frontend
-              ├── git checkout main
-              ├── sed replaces fe_tag: → 7e7710c in values.yaml
-              └── git push → main
+        ├── update-helm-frontend
+        │     ├── needs: build-frontend       ← waits for build-frontend
+        │     ├── git pull --rebase origin main
+        │     ├── sed replaces fe_tag: → 7e7710c in values.yaml
+        │     └── git commit "Update frontend image [skip ci]" → push
+        │
+        └── update-helm-backend
+              ├── needs: update-helm-frontend (optional: true)
+              └── skipped — no backend files changed
                     │
                     ▼
               ArgoCD detects values.yaml changed
-                    │
                     ▼
-              ArgoCD syncs → helm upgrade
-                    │
-                    ▼
-              Rolling update: frontend pod pulls new image
+              ArgoCD syncs → helm upgrade → rolling update (frontend pod)
 ```
 
----
+### Both frontend and backend changed
 
-*Task Manager DevOps Documentation · GitLab CI Section*
+```
+git push → main (both frontend and backend files changed)
+  │
+  ├── [stage: build]
+  │     ├── build-frontend   ← runs in parallel
+  │     └── build-backend    ← runs in parallel
+  │
+  └── [stage: update-helm]
+        ├── update-helm-frontend
+        │     ├── needs: build-frontend
+        │     ├── git pull --rebase origin main
+        │     ├── sed replaces fe_tag: → 7e7710c
+        │     └── git push → main [skip ci]
+        │
+        └── update-helm-backend
+              ├── needs: update-helm-frontend (optional: true) ← waits for frontend job
+              ├── git pull --rebase origin main   ← picks up frontend's commit
+              ├── sed replaces be_tag: → 7e7710c
+              └── git push → main [skip ci]
+                    │
+                    ▼
+              ArgoCD detects values.yaml changed (both tags updated)
+                    ▼
+              ArgoCD syncs → helm upgrade → rolling update (frontend + backend pods)
+```

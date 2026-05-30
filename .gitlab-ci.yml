@@ -54,10 +54,11 @@ update-helm-frontend:
     - git config --global user.name "CI Bot"
     - git remote set-url origin https://$CI_USERNAME:$CI_PASSWORD@gitlab.com/deeowemez/task-app.git
     - git checkout main
+    - git pull --rebase origin main
     - echo "Updating frontend image in Helm values.yaml"
     - sed -i "s|^\(\s*fe_tag:\s*\).*|\1$CI_COMMIT_SHORT_SHA|" helm/values.yaml
     - git add helm/values.yaml
-    - git commit -m "Update frontend image"
+    - git commit -m "Update frontend image [skip ci]"
     - git push origin main
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
@@ -75,10 +76,11 @@ update-helm-backend:
     - git config --global user.name "CI Bot"
     - git remote set-url origin https://$CI_USERNAME:$CI_PASSWORD@gitlab.com/deeowemez/task-app.git
     - git checkout main
+    - git pull --rebase origin main
     - echo "Updating backend image in Helm values.yaml"
     - sed -i "s|^\(\s*be_tag:\s*\).*|\1$CI_COMMIT_SHORT_SHA|" helm/values.yaml
     - git add helm/values.yaml
-    - git commit -m "Update backend image"
+    - git commit -m "Update backend image [skip ci]"
     - git push origin main
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'

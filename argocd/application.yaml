@@ -3,27 +3,6 @@ kind: Application
 metadata:
   name: task-app
   namespace: argocd
-  annotations:
-    argocd-image-updater.argoproj.io/image-list: |
-      frontend=registry.gitlab.com/deeowemez/task-app/frontend
-      backend=registry.gitlab.com/deeowemez/task-app/backend
-
-    # Update strategy for each image (latest short SHA)
-    argocd-image-updater.argoproj.io/frontend.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/backend.update-strategy: newest-build
-
-    # Only allow short 7-char SHA tags
-    argocd-image-updater.argoproj.io/frontend.allow-tags: regexp:^[0-9a-f]{7}$
-    argocd-image-updater.argoproj.io/backend.allow-tags: regexp:^[0-9a-f]{7}$
-
-    # How the updater writes back changes
-    argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/git-branch: main
-
-    # Registry auth
-    argocd-image-updater.argoproj.io/backend.pull-secret: gitlab-registry-secret
-    argocd-image-updater.argoproj.io/frontend.pull-secret: gitlab-registry-secret
-
 spec:
   project: default
 
@@ -46,3 +25,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
