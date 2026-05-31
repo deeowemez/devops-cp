@@ -2,10 +2,10 @@
   "name": "task-manager-backend",
   "version": "1.0.0",
   "description": "Backend API for task manager application",
-  "main": "src/server.js",
+  "main": "./src/server.js",
   "scripts": {
-    "start": "node -r src/tracing.js src/server.js",
-    "dev": "nodemon -r src/tracing.js src/server.js",
+    "start": "node -r ./src/tracing.js ./src/server.js",
+    "dev": "nodemon -r ./src/tracing.js ./src/server.js",
     "test": "jest",
     "lint": "eslint src/",
     "migrate": "node-pg-migrate"
