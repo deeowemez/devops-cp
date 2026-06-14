@@ -17,7 +17,6 @@
 # ----------------------- replace below this line -----------------------
 
 grafana:
-  adminPassword: admin123
   resources:
     limits:
       memory: 512Mi

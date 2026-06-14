@@ -7,6 +7,8 @@
 repositories:
   - name: grafana
     url: https://grafana.github.io/helm-charts
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
 
 # Settings applied to every release below.
 helmDefaults:
@@ -17,7 +19,7 @@ helmDefaults:
 releases:
   - name: prometheus
     namespace: observability
-    chart: grafana/kube-prometheus-stack
+    chart: prometheus-community/kube-prometheus-stack
     version: 86.1.0
     values:
       - prometheus-values.yaml

@@ -19,7 +19,7 @@ Pinned versions (from `helm list -n observability`):
 
 | Release    | Chart                            | Version  | App      |
 |------------|----------------------------------|----------|----------|
-| prometheus | grafana/kube-prometheus-stack    | 86.1.0   | v0.91.0  |
+| prometheus | prometheus-community/kube-prometheus-stack | 86.1.0 | v0.91.0 |
 | loki       | grafana/loki                     | 7.0.0    | 3.6.7    |
 | promtail   | grafana/promtail                 | 6.17.1   | 3.5.1    |
 | tempo      | grafana/tempo                    | 1.24.4   | 2.9.0    |
