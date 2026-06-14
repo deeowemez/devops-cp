@@ -2,15 +2,12 @@
 # Chart:      grafana/kube-prometheus-stack
 # Version:    86.1.0         # app version v0.91.0 (prometheus-operator)
 # Namespace:  observability
-#
-# !! PLACEHOLDER — this release is at REVISION 4, so it has been changed 3x
-#    since install. Capture the real values ON THE PI and replace everything
-#    below the marker:
-#
-#        helm get values prometheus -n observability -o yaml
-#
 
 grafana:
+  admin:
+    existingSecret: grafana-admin
+    userKey: admin-user
+    passwordKey: admin-password
   resources:
     limits:
       memory: 512Mi
