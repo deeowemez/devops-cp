@@ -1,0 +1,6 @@
+# Plain secrets
+*secret.yaml
+*secrets.yaml
+
+# Sealed secrets
+!*sealed.yaml

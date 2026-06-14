@@ -9,12 +9,6 @@
 #
 #        helm get values prometheus -n observability -o yaml
 #
-# !! SECRET WARNING: the original install used grafana.adminPassword=admin123.
-#    If that appears in the captured output, do NOT commit it in plaintext.
-#    Either remove it (let the chart generate one) or move it to a Secret /
-#    sealed-secret and reference it. See README.md "Secrets".
-#
-# ----------------------- replace below this line -----------------------
 
 grafana:
   resources:
