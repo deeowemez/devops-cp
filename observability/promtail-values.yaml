@@ -1,0 +1,19 @@
+# Release:    promtail
+# Chart:      grafana/promtail
+# Version:    6.17.1         # app version 3.5.1
+# Namespace:  observability
+#
+# Promtail is the agent that scrapes pod logs and ships them to Loki. It is a
+# SEPARATE release from loki (the old loki-stack bundled them; this setup does
+# not). REVISION 1 = never changed, so it may have no overrides at all — in
+# which case leaving this as {} (chart defaults) is correct.
+#
+# Capture / confirm ON THE PI:
+#
+#        helm get values promtail -n observability -o yaml
+#
+# ----------------------- replace below this line -----------------------
+
+config:
+  clients:
+  - url: http://loki.observability.svc.cluster.local:3100/loki/api/v1/push

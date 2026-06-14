@@ -1,0 +1,36 @@
+# Release:    loki
+# Chart:      grafana/loki
+# Version:    7.0.0          # app version 3.6.7
+# Namespace:  observability
+# Source:     helm get values loki -n observability   (captured 2026-05-30)
+#
+# Single-binary Loki on a single node (Raspberry Pi). All microservice-mode
+# components (read/write/backend/caches/gateway/canary) are disabled so Loki
+# runs as one process with filesystem storage.
+
+backend:
+  replicas: 0
+chunksCache:
+  enabled: false
+deploymentMode: SingleBinary
+gateway:
+  enabled: false
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: filesystem
+  useTestSchema: true
+lokiCanary:
+  enabled: false
+read:
+  replicas: 0
+resultsCache:
+  enabled: false
+singleBinary:
+  replicas: 1
+test:
+  enabled: false
+write:
+  replicas: 0

@@ -1,0 +1,20 @@
+# Release:    tempo
+# Chart:      grafana/tempo
+# Version:    1.24.4         # app version 2.9.0
+# Namespace:  observability
+#
+# !! PLACEHOLDER — this release is at REVISION 2 (changed once since install).
+#    Capture the real values ON THE PI and replace everything below the marker:
+#
+#        helm get values tempo -n observability -o yaml
+#
+# ----------------------- replace below this line -----------------------
+
+replicas: 1
+resources:
+  limits:
+    memory: 256Mi
+  requests:
+    memory: 128Mi
+tempo:
+  retention: 24h

@@ -1,0 +1,46 @@
+# Declarative definition of the observability stack.
+# Rebuild the whole stack on a fresh machine with:  helmfile sync
+#
+# Versions are pinned to exactly what `helm list -n observability` reported,
+# so a sync reproduces the same charts (not just "latest").
+
+repositories:
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
+
+# Settings applied to every release below.
+helmDefaults:
+  createNamespace: true     # create the observability namespace if missing
+  wait: true                # wait for resources to become ready
+  timeout: 600
+
+releases:
+  - name: prometheus
+    namespace: observability
+    chart: grafana/kube-prometheus-stack
+    version: 86.1.0
+    values:
+      - prometheus-values.yaml
+
+  - name: loki
+    namespace: observability
+    chart: grafana/loki
+    version: 7.0.0
+    values:
+      - loki-values.yaml
+
+  - name: promtail
+    namespace: observability
+    chart: grafana/promtail
+    version: 6.17.1
+    values:
+      - promtail-values.yaml
+    needs:
+      - observability/loki      # promtail ships logs TO loki; install loki first
+
+  - name: tempo
+    namespace: observability
+    chart: grafana/tempo
+    version: 1.24.4
+    values:
+      - tempo-values.yaml

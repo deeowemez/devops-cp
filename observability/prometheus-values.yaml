@@ -1,0 +1,33 @@
+# Release:    prometheus
+# Chart:      grafana/kube-prometheus-stack
+# Version:    86.1.0         # app version v0.91.0 (prometheus-operator)
+# Namespace:  observability
+#
+# !! PLACEHOLDER — this release is at REVISION 4, so it has been changed 3x
+#    since install. Capture the real values ON THE PI and replace everything
+#    below the marker:
+#
+#        helm get values prometheus -n observability -o yaml
+#
+# !! SECRET WARNING: the original install used grafana.adminPassword=admin123.
+#    If that appears in the captured output, do NOT commit it in plaintext.
+#    Either remove it (let the chart generate one) or move it to a Secret /
+#    sealed-secret and reference it. See README.md "Secrets".
+#
+# ----------------------- replace below this line -----------------------
+
+grafana:
+  adminPassword: admin123
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      memory: 256Mi
+prometheus:
+  prometheusSpec:
+    resources:
+      limits:
+        memory: 400Mi
+      requests:
+        memory: 200Mi
+    retention: 1d
