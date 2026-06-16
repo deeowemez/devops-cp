@@ -1,0 +1,46 @@
+# Infrastructure (node-level) alert rules.
+# Picked up by the prometheus-operator via the `release: prometheus` label.
+#
+#   kubectl apply -f observability/alerts/infrastructure.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: infrastructure-alerts
+  namespace: observability
+  labels:
+    release: prometheus
+    role: alert-rules
+spec:
+  groups:
+    - name: infrastructure.rules
+      rules:
+
+        # Node CPU Usage Alert
+        - alert: HighNodeCPU
+          expr: (100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High CPU usage on node"
+            description: "CPU usage is {{ $value }}% on node {{ $labels.instance }}"
+
+        # Node Memory Usage Alert
+        - alert: HighNodeMemory
+          expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High memory usage on node"
+            description: "Memory usage is {{ $value }}% on node {{ $labels.instance }}"
+
+        # Disk Space Alert
+        - alert: LowDiskSpace
+          expr: (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) * 100 > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Low disk space"
+            description: "Disk usage is {{ $value }}% on {{ $labels.instance }}:{{ $labels.mountpoint }}"
