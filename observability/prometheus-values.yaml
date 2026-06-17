@@ -35,6 +35,9 @@ alertmanager:
       group_wait: 30s
       group_interval: 5m
       repeat_interval: 1h
+      routes:
+        - matchers: ['alertname = "Watchdog"']
+          receiver: "null"
     receivers:
       - name: slack
         slack_configs:
@@ -46,3 +49,4 @@ alertmanager:
               {{ .Annotations.description }}
               _severity:_ {{ .Labels.severity }}
               {{ end }}
+      - name: "null"
