@@ -24,10 +24,15 @@ releases:
     values:
       - prometheus-values.yaml
 
+  # Logging (loki + promtail) and tracing (tempo) are disabled to relieve
+  # memory pressure on the Pi during the metrics/alerting POC.
+  # Flip `installed:` back to true (or remove the line) + `helmfile apply`
+  # to bring a subsystem back.
   - name: loki
     namespace: observability
     chart: grafana/loki
     version: 7.0.0
+    installed: false
     values:
       - loki-values.yaml
 
@@ -35,6 +40,7 @@ releases:
     namespace: observability
     chart: grafana/promtail
     version: 6.17.1
+    installed: false
     values:
       - promtail-values.yaml
     needs:
@@ -44,5 +50,6 @@ releases:
     namespace: observability
     chart: grafana/tempo
     version: 1.24.4
+    installed: false
     values:
       - tempo-values.yaml
